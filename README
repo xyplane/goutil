@@ -1,1 +1,3 @@
 A collection of utilities written in Go.
+
+log: An enhanced logger based on the standard Go logger.
