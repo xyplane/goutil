@@ -27,8 +27,8 @@ type Properties struct {
 
 // ReadProperties decodes JSON data and stores it in a Properties structure.
 func ReadProperties(r io.Reader) (p Properties, err os.Error) {
-	var root interface{}	
-	err = json.NewDecoder(r).Decode(root)
+	var root interface{}
+	err = json.NewDecoder(r).Decode(&root)
 	if err != nil {
 		return
 	}
@@ -38,13 +38,13 @@ func ReadProperties(r io.Reader) (p Properties, err os.Error) {
 
 // Bool retrieves a boolean property value and an error if not found.
 func (p Properties) Bool(name ...interface{}) (bool, os.Error) {
-	i, err := p.Property(name)
+	i, err := p.Property(name...)
 	if err != nil {
 		return false, err
 	}
 	v, ok := i.(bool)
 	if !ok {
-		err = os.NewError("")
+		err = os.NewError("property is not of type 'bool'.")
 		return false, err
 	} 
 	return v, nil
@@ -52,7 +52,7 @@ func (p Properties) Bool(name ...interface{}) (bool, os.Error) {
 
 // BoolDefault retrieves a boolean property value or the specified default.
 func (p Properties) BoolDefault(dflt bool, name ...interface{}) bool {
-	v, err := p.Bool(name)
+	v, err := p.Bool(name...)
 	if err != nil {
 		return dflt
 	}
@@ -81,7 +81,7 @@ func (p Properties) Property(name ...interface{}) (interface{}, os.Error) {
 			var ok bool
 			cur, ok = v[sn] 
 			if !ok {
-				err := os.NewError("")
+				err := os.NewError(fmt.Sprint("map property does not contain key: ", sn))
 				return nil, err
 			}
 		case []interface{}:
@@ -90,7 +90,7 @@ func (p Properties) Property(name ...interface{}) (interface{}, os.Error) {
 				return nil, err
 			}
 			if idx >= int64(len(v)) {
-				err = os.NewError("")
+				err = os.NewError(fmt.Sprint("array property does not contain index: ", idx))
 				return nil, err
 			}
 			cur = v[idx]
@@ -115,6 +115,8 @@ func coerce(name interface{}) (sname string, err os.Error) {
 	switch i := name.(type) {
 		case int64:
 			sname = strconv.Itoa64(i)
+		case []byte:
+			sname = string(i)
 		case string:
 			sname = i	
 		case fmt.Stringer:
@@ -122,7 +124,7 @@ func coerce(name interface{}) (sname string, err os.Error) {
 		case func() string:
 			sname = i()
 		default:
-			err = os.NewError("")
+			err = os.NewError("name can not be coerced to string")
 	}
 	return
 }
