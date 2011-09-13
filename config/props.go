@@ -115,8 +115,8 @@ func coerce(name interface{}) (sname string, err os.Error) {
 	switch i := name.(type) {
 		case int64:
 			sname = strconv.Itoa64(i)
-		case []byte:
-			sname = string(i)
+		//case []byte:
+		//	sname = string(i)
 		case string:
 			sname = i	
 		case fmt.Stringer:
