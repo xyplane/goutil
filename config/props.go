@@ -9,10 +9,13 @@ import (
 	"fmt"
 	"json"
 	"regexp"
+	"strings"
 	"strconv"
+	"reflect"
 )
 
-var PropNameRegex = regexp.MustCompile("(.+)(\\[[0-9]+\\])?\\.*") 
+var PropNameDelim = "."
+var PropNameRegex = regexp.MustCompile("^(.+)(\\[([0-9]+)\\])$") 
 
 type Properties struct {
 	root interface{}
@@ -26,23 +29,23 @@ type Properties struct {
 
 
 // ReadProperties decodes JSON data and stores it in a Properties structure.
-func ReadProperties(r io.Reader) (p Properties, err os.Error) {
+func ReadProperties(r io.Reader) (*Properties, os.Error) {
 	var root interface{}
-	err = json.NewDecoder(r).Decode(&root)
+	decoder := json.NewDecoder(r)
+	err := decoder.Decode(&root)
 	if err != nil {
-		return
+		return nil, err
 	}
-	p = Properties{ root }
-	return
+	return &Properties{ root }, nil
 }
 
 // Bool retrieves a boolean property value and an error if not found.
-func (p Properties) Bool(name ...interface{}) (bool, os.Error) {
-	i, err := p.Property(name...)
+func (p *Properties) Bool(name ...interface{}) (bool, os.Error) {
+	prop, err := p.Property(name...)
 	if err != nil {
 		return false, err
 	}
-	v, ok := i.(bool)
+	v, ok := prop.(bool)
 	if !ok {
 		err = os.NewError("property is not of type 'bool'.")
 		return false, err
@@ -51,7 +54,7 @@ func (p Properties) Bool(name ...interface{}) (bool, os.Error) {
 }
 
 // BoolDefault retrieves a boolean property value or the specified default.
-func (p Properties) BoolDefault(dflt bool, name ...interface{}) bool {
+func (p *Properties) BoolDefault(dflt bool, name ...interface{}) bool {
 	v, err := p.Bool(name...)
 	if err != nil {
 		return dflt
@@ -60,14 +63,10 @@ func (p Properties) BoolDefault(dflt bool, name ...interface{}) bool {
 }
 
 // Property retrieves a raw Property value and an error if not found. 
-func (p Properties) Property(name ...interface{}) (interface{}, os.Error) {
-	var sname []string
-	for _, n := range name {
-		sn, err := coerce(n)
-		if err != nil {
-			return nil, err 
-		}
-		sname = append(sname, sn)
+func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
+	sname, err := coerce(name...)
+	if err != nil {
+		return nil, err 
 	}
 	
 	if len(sname) == 1 {
@@ -100,31 +99,42 @@ func (p Properties) Property(name ...interface{}) (interface{}, os.Error) {
 }
 
 func split(name string) []string {
-	var names []string
-	matches := PropNameRegex.FindAllStringSubmatch(name, -1)	
-	for _, match := range matches {
-		names = append(names, match[1])
-		if match[2] != "" {
-			names = append(names, match[2])
+	var sname []string
+	names := strings.Split(name, PropNameDelim)
+	for _, n := range names {
+		if n != "" {
+			match := PropNameRegex.FindStringSubmatch(n)
+			if match == nil {
+				sname = append(sname, n)
+			} else {
+				sname = append(sname, match[1], match[3])
+			}
 		}
 	}
-	return names;
+	return sname
 } 
 
-func coerce(name interface{}) (sname string, err os.Error) {
-	switch i := name.(type) {
-		case int64:
-			sname = strconv.Itoa64(i)
-		//case []byte:
-		//	sname = string(i)
-		case string:
-			sname = i	
-		case fmt.Stringer:
-			sname = i.String()
-		case func() string:
-			sname = i()
-		default:
-			err = os.NewError("name can not be coerced to string")
+func coerce(name ...interface{}) (sname []string, err os.Error) {
+	L: for _, n := range name {
+		switch v := n.(type) {
+			case string:
+				sname = append(sname, v)	
+			case func() string:
+				sname = append(sname, v())
+			case fmt.Stringer:
+				sname = append(sname, v.String())
+			case int:
+				sname = append(sname, strconv.Itoa(v))
+			case int64:
+				sname = append(sname, strconv.Itoa64(v))
+			case float32:
+				sname = append(sname, strconv.Itoa64(int64(v)))
+			case float64:
+				sname = append(sname, strconv.Itoa64(int64(v)))
+			default:
+				err = os.NewError(fmt.Sprint("name can not be coerced from type: ", reflect.TypeOf(n)))
+				break L
+		}
 	}
 	return
 }
