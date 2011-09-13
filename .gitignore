@@ -1,0 +1,9 @@
+# Go package files
+*.a
+
+# Go object files
+*.[568]
+
+# Go test files
+_test*
+*.out
