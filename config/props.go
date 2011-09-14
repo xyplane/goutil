@@ -103,6 +103,29 @@ func (p *Properties) Float64Default(dflt float64, name ...interface{}) float64 {
 	return v
 }
 
+// String retrieves a string property value or an error if not found.
+func (p *Properties) String(name ...interface{}) (string, os.Error) {
+	prop, err := p.Property(name...)
+	if err != nil {
+		return "", err
+	}
+	v, ok := prop.(string)
+	if !ok {
+		err = os.NewError("property is not of type 'string'.")
+		return "", err
+	} 
+	return v, nil
+}
+
+// String retrieves a string property value or the specified default.
+func (p *Properties) StringDefault(dflt string, name ...interface{}) string {
+	v, err := p.String(name...)
+	if err != nil {
+		return dflt
+	}
+	return v
+}
+
 // Property retrieves a raw Property value and an error if not found. 
 func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 	sname, err := coerce(name...)
