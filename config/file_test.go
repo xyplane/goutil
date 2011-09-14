@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestFile(t *testing.T) {
 	} else {
 		t.Fatal("Error reading test config file:", err)
 	}
-	
+
 	var host string
 	host, err = c.String("host")
 	if err == nil {

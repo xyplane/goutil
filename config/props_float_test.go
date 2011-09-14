@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"strings"
 	"testing"
@@ -28,7 +28,7 @@ func TestFloat(t *testing.T) {
 	} else {
 		t.Fatal("Error reading config properties:", err)
 	}
-	
+
 	var f float64
 
 	f, err = properties.Float64("float1")
@@ -63,7 +63,7 @@ func TestFloat(t *testing.T) {
 	} else {
 		t.Error("Error getting float64 value from property 'float3':", err)
 	}
-	
+
 	f, err = properties.Float64("level2.float4[0]")
 	if err == nil {
 		if f == 1.0 {
@@ -74,7 +74,7 @@ func TestFloat(t *testing.T) {
 	} else {
 		t.Error("Error getting float64 value from property 'float4[0]':", err)
 	}
-	
+
 	f, err = properties.Float64("level2", "float4", 1)
 	if err == nil {
 		if f == 2.0 {
@@ -85,7 +85,7 @@ func TestFloat(t *testing.T) {
 	} else {
 		t.Error("Error getting float64 value from property 'float4[1]':", err)
 	}
-	
+
 	f = properties.Float64Default(1.0, "level2", "float5")
 	if err == nil {
 		if f == 1.0 {

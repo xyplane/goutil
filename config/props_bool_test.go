@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"strings"
 	"testing"
@@ -29,7 +29,7 @@ func TestBool(t *testing.T) {
 	} else {
 		t.Fatal("Error reading config properties:", err)
 	}
-	
+
 	var b bool
 
 	b, err = properties.Bool("bool1")
@@ -43,7 +43,6 @@ func TestBool(t *testing.T) {
 		t.Error("Error getting bool value from property 'bool1':", err)
 	}
 
-
 	b, err = properties.Bool("bool2")
 	if err == nil {
 		if b == false {
@@ -54,7 +53,6 @@ func TestBool(t *testing.T) {
 	} else {
 		t.Error("Error getting bool value from property 'bool2':", err)
 	}
-
 
 	b, err = properties.Bool("level2.bool3")
 	if err == nil {
@@ -67,9 +65,8 @@ func TestBool(t *testing.T) {
 		t.Error("Error getting bool value from property 'bool3':", err)
 	}
 
-
 	b, err = properties.Bool("level2", "bool4")
-	if err == nil {	
+	if err == nil {
 		if b == false {
 			t.Log("Bool value for 'bool4' is false.")
 		} else {
@@ -78,7 +75,6 @@ func TestBool(t *testing.T) {
 	} else {
 		t.Error("Error getting bool value from property 'bool4':", err)
 	}
-
 
 	b, err = properties.Bool("level2.bool5[0]")
 	if err == nil {
@@ -90,7 +86,6 @@ func TestBool(t *testing.T) {
 	} else {
 		t.Error("Error getting bool value from property 'bool5[0]':", err)
 	}
-	
 
 	b, err = properties.Bool("level2", "bool5", 1)
 	if err == nil {
@@ -102,7 +97,7 @@ func TestBool(t *testing.T) {
 	} else {
 		t.Error("Error retrieving bool value from property 'bool5[1]':", err)
 	}
-	
+
 	b = properties.BoolDefault(true, "level2", "bool6")
 	if b == true {
 		t.Log("Default Bool value for 'bool6' is true.")
@@ -110,4 +105,3 @@ func TestBool(t *testing.T) {
 		t.Error("Default Bool value for 'bool6' is not true.")
 	}
 }
-

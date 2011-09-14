@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"strings"
 	"testing"
@@ -28,7 +28,7 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Fatal("Error reading config properties:", err)
 	}
-	
+
 	var i int64
 
 	i, err = properties.Int64("int1")
@@ -41,7 +41,7 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Error("Error getting int64 value from property 'int1':", err)
 	}
-	
+
 	i, err = properties.Int64("int2")
 	if err == nil {
 		if i == 2 {
@@ -52,7 +52,7 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Error("Error getting int64 value from property 'int2':", err)
 	}
-	
+
 	i, err = properties.Int64("level2.int3")
 	if err == nil {
 		if i == 0 {
@@ -63,7 +63,7 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Error("Error getting int64 value from property 'int1':", err)
 	}
-	
+
 	i, err = properties.Int64("level2.int4[0]")
 	if err == nil {
 		if i == 1 {
@@ -74,7 +74,7 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Error("Error getting int64 value from property 'int4[0]':", err)
 	}
-	
+
 	i, err = properties.Int64("level2", "int4", 1)
 	if err == nil {
 		if i == 2 {
@@ -85,8 +85,8 @@ func TestInt(t *testing.T) {
 	} else {
 		t.Error("Error getting int64 value from property 'int4[1]':", err)
 	}
-	
-	i = properties.Int64Default(99, "level2", "int5");
+
+	i = properties.Int64Default(99, "level2", "int5")
 	if i == 99 {
 		t.Log("Int64 value for 'int5' is 99.")
 	} else {

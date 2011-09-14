@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"strings"
 	"testing"
@@ -27,7 +27,7 @@ func TestProps(t *testing.T) {
 	} else {
 		t.Fatal("Error reading config properties:", err)
 	}
-	
+
 	var p *config.Properties
 
 	p, err = properties.Properties("string1")
@@ -42,11 +42,11 @@ func TestProps(t *testing.T) {
 			}
 		} else {
 			t.Error("Error getting string value from property '':", err)
-		}	
+		}
 	} else {
 		t.Error("Error getting Properties value from property 'string1':", err)
 	}
-	
+
 	p, err = properties.Properties("level2")
 	if err == nil {
 		var f float64
@@ -59,11 +59,11 @@ func TestProps(t *testing.T) {
 			}
 		} else {
 			t.Error("Error getting float64 value from property 'float2':", err)
-		}	
+		}
 	} else {
 		t.Error("Error getting Properties value from property 'level2':", err)
 	}
-	
+
 	p, err = properties.Properties("level2.mixed3")
 	if err == nil {
 		var s string
@@ -76,11 +76,11 @@ func TestProps(t *testing.T) {
 			}
 		} else {
 			t.Error("Error getting string value from property '0':", err)
-		}	
+		}
 	} else {
 		t.Error("Error getting Properties value from property 'level2.mixed3':", err)
 	}
-	
+
 	p, err = properties.Properties("level2", "mixed3", 1)
 	if err == nil {
 		var i int64
@@ -93,7 +93,7 @@ func TestProps(t *testing.T) {
 			}
 		} else {
 			t.Error("Error getting int64 value from property '':", err)
-		}	
+		}
 	} else {
 		t.Error("Error getting Properties value from property 'level2.mixed3[1]':", err)
 	}

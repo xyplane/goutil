@@ -1,9 +1,9 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config_test
 
-import(
+import (
 	"config"
 	"strings"
 	"testing"
@@ -28,7 +28,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Fatal("Error reading config properties:", err)
 	}
-	
+
 	var s string
 
 	s, err = properties.String("string1")
@@ -41,7 +41,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Error("Error getting string value from property 'string1':", err)
 	}
-	
+
 	s, err = properties.String("string2")
 	if err == nil {
 		if s == "HW!" {
@@ -52,7 +52,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Error("Error getting string value from property 'string2':", err)
 	}
-	
+
 	s, err = properties.String("level2.string3")
 	if err == nil {
 		if s == "3.0e-3" {
@@ -63,7 +63,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Error("Error getting string value from property 'string3':", err)
 	}
-	
+
 	s, err = properties.String("level2.string4[0]")
 	if err == nil {
 		if s == "one" {
@@ -74,7 +74,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Error("Error getting string value from property 'string4[0]':", err)
 	}
-	
+
 	s, err = properties.String("level2.string4[1]")
 	if err == nil {
 		if s == "two" {
@@ -85,7 +85,7 @@ func TestString(t *testing.T) {
 	} else {
 		t.Error("Error getting string value from property 'string4[1]':", err)
 	}
-	
+
 	s = properties.StringDefault("test", "level2", "string5")
 	if s == "test" {
 		t.Log("Default String value for 'string5' is 'test'.")

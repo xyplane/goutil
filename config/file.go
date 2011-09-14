@@ -1,6 +1,6 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config
 
 import (
@@ -19,14 +19,14 @@ func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 	if err != nil {
 		return
 	}
-	
+
 	var p *Properties
 	p, err = ReadProperties(f)
 	if err != nil {
 		return
 	}
-	
-	return &ConfigFile{ p, fname }, nil
+
+	return &ConfigFile{p, fname}, nil
 }
 
 func (c *ConfigFile) SetFileName(fname string) {

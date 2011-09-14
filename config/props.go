@@ -1,6 +1,6 @@
-//
-//
-//
+// Copyright 2011 Dylan Maxwell.  All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 package config
 
 import (
@@ -15,7 +15,7 @@ import (
 )
 
 var PropNameDelim = "."
-var PropNameRegex = regexp.MustCompile("^(.+)\\[([0-9]+)\\]$") 
+var PropNameRegex = regexp.MustCompile("^(.+)\\[([0-9]+)\\]$")
 
 type Properties struct {
 	root interface{}
@@ -29,7 +29,7 @@ func ReadProperties(r io.Reader) (*Properties, os.Error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Properties{ root }, nil
+	return &Properties{root}, nil
 }
 
 // Bool retrieves a boolean property value and an error if not found.
@@ -42,7 +42,7 @@ func (p *Properties) Bool(name ...interface{}) (bool, os.Error) {
 	if !ok {
 		err = os.NewError("property is not of type 'bool'.")
 		return false, err
-	} 
+	}
 	return v, nil
 }
 
@@ -83,7 +83,7 @@ func (p *Properties) Float64(name ...interface{}) (float64, os.Error) {
 	if !ok {
 		err = os.NewError("property is not of type 'float64'.")
 		return 0.0, err
-	} 
+	}
 	return v, nil
 }
 
@@ -106,7 +106,7 @@ func (p *Properties) String(name ...interface{}) (string, os.Error) {
 	if !ok {
 		err = os.NewError("property is not of type 'string'.")
 		return "", err
-	} 
+	}
 	return v, nil
 }
 
@@ -125,26 +125,26 @@ func (p *Properties) Properties(name ...interface{}) (*Properties, os.Error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Properties{ prop }, nil
+	return &Properties{prop}, nil
 }
 
 // Property retrieves a raw Property value and an error if not found. 
 func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 	sname, err := coerce(name...)
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
-	
+
 	if len(sname) == 1 {
 		sname = split(sname[0])
 	}
-	
+
 	var cur interface{} = p.root
 	for _, sn := range sname {
 		switch v := cur.(type) {
 		case map[string]interface{}:
 			var ok bool
-			cur, ok = v[sn] 
+			cur, ok = v[sn]
 			if !ok {
 				err := os.NewError(fmt.Sprint("map property does not contain key: ", sn))
 				return nil, err
@@ -178,28 +178,29 @@ func split(name string) []string {
 		}
 	}
 	return sname
-} 
+}
 
 func coerce(name ...interface{}) (sname []string, err os.Error) {
-	L: for _, n := range name {
+L:
+	for _, n := range name {
 		switch v := n.(type) {
-			case string:
-				sname = append(sname, v)	
-			case func() string:
-				sname = append(sname, v())
-			case fmt.Stringer:
-				sname = append(sname, v.String())
-			case int:
-				sname = append(sname, strconv.Itoa(v))
-			case int64:
-				sname = append(sname, strconv.Itoa64(v))
-			case float32:
-				sname = append(sname, strconv.Itoa64(int64(v)))
-			case float64:
-				sname = append(sname, strconv.Itoa64(int64(v)))
-			default:
-				err = os.NewError(fmt.Sprint("name cannot be coerced from type: ", reflect.TypeOf(n)))
-				break L
+		case string:
+			sname = append(sname, v)
+		case func() string:
+			sname = append(sname, v())
+		case fmt.Stringer:
+			sname = append(sname, v.String())
+		case int:
+			sname = append(sname, strconv.Itoa(v))
+		case int64:
+			sname = append(sname, strconv.Itoa64(v))
+		case float32:
+			sname = append(sname, strconv.Itoa64(int64(v)))
+		case float64:
+			sname = append(sname, strconv.Itoa64(int64(v)))
+		default:
+			err = os.NewError(fmt.Sprint("name cannot be coerced from type: ", reflect.TypeOf(n)))
+			break L
 		}
 	}
 	return
