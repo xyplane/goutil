@@ -62,6 +62,24 @@ func (p *Properties) BoolDefault(dflt bool, name ...interface{}) bool {
 	return v
 }
 
+// Int64 retrieves a int64 property value or an error if not found.
+func (p *Properties) Int64(name ...interface{}) (int64, os.Error) {
+	f, err := p.Float64(name...)
+	if err != nil {
+		return 0, err
+	}
+	return int64(f), nil
+}
+
+// Int64Default retrieves a int64 property value or the specified default.
+func (p *Properties) Int64Default(dflt int64, name ...interface{}) int64 {
+	v, err := p.Float64(name...)
+	if err != nil {
+		return dflt
+	}
+	return int64(v)
+}
+
 // Float64 retrieves a float64 property value or an error if not found.
 func (p *Properties) Float64(name ...interface{}) (float64, os.Error) {
 	prop, err := p.Property(name...)
