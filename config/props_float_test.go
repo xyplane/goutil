@@ -39,7 +39,7 @@ func TestFloat(t *testing.T) {
 			t.Error("Float64 value for 'float1' is not 1.0.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float1':", err)
+		t.Error("Error getting float64 value from property 'float1':", err)
 	}
 
 	f, err = properties.Float64("float2")
@@ -50,7 +50,7 @@ func TestFloat(t *testing.T) {
 			t.Error("Float64 value for 'float2' is not 2.0.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float2':", err)
+		t.Error("Error getting float64 value from property 'float2':", err)
 	}
 
 	f, err = properties.Float64("level2", "float3")
@@ -61,7 +61,7 @@ func TestFloat(t *testing.T) {
 			t.Error("Float64 value for 'float3' is not 0.003.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float3':", err)
+		t.Error("Error getting float64 value from property 'float3':", err)
 	}
 	
 	f, err = properties.Float64("level2.float4[0]")
@@ -72,7 +72,7 @@ func TestFloat(t *testing.T) {
 			t.Error("Float64 value for 'float4[0]' is not 1.0.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float4[0]':", err)
+		t.Error("Error getting float64 value from property 'float4[0]':", err)
 	}
 	
 	f, err = properties.Float64("level2", "float4", 1)
@@ -83,7 +83,7 @@ func TestFloat(t *testing.T) {
 			t.Error("Float64 value for 'float4[1]' is not 2.0.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float4[1]':", err)
+		t.Error("Error getting float64 value from property 'float4[1]':", err)
 	}
 	
 	f = properties.Float64Default(1.0, "level2", "float5")
@@ -94,6 +94,6 @@ func TestFloat(t *testing.T) {
 			t.Error("Default Float64 value for 'float5' is not 1.0.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'float5':", err)
+		t.Error("Error getting float64 value from property 'float5':", err)
 	}
 }

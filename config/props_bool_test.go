@@ -40,7 +40,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool1' is not true.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'bool1':", err)
+		t.Error("Error getting bool value from property 'bool1':", err)
 	}
 
 
@@ -52,7 +52,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool2' is not false.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'bool2':", err)
+		t.Error("Error getting bool value from property 'bool2':", err)
 	}
 
 
@@ -64,7 +64,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool3' is not true.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'bool3':", err)
+		t.Error("Error getting bool value from property 'bool3':", err)
 	}
 
 
@@ -76,7 +76,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool4' is not false.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'bool4':", err)
+		t.Error("Error getting bool value from property 'bool4':", err)
 	}
 
 
@@ -88,7 +88,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool5[0]' is not true.")
 		}
 	} else {
-		t.Error("Error getting Bool value from property 'bool5[0]':", err)
+		t.Error("Error getting bool value from property 'bool5[0]':", err)
 	}
 	
 
@@ -100,7 +100,7 @@ func TestBool(t *testing.T) {
 			t.Error("Bool value for 'bool5[1]' is not false.")
 		}
 	} else {
-		t.Error("Error retrieving Bool value from property 'bool5[1]':", err)
+		t.Error("Error retrieving bool value from property 'bool5[1]':", err)
 	}
 	
 	b = properties.BoolDefault(true, "level2", "bool6")
