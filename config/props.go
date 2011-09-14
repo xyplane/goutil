@@ -146,7 +146,7 @@ func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 			var ok bool
 			cur, ok = v[sn]
 			if !ok {
-				err := os.NewError(fmt.Sprint("map property does not contain key: ", sn))
+				err := os.NewError(fmt.Sprint("map property does not contain key:", sn))
 				return nil, err
 			}
 		case []interface{}:
@@ -155,11 +155,14 @@ func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 				return nil, err
 			}
 			if (idx < 0) || (idx >= int64(len(v))) {
-				err = os.NewError(fmt.Sprint("array property does not contain index: ", idx))
+				err = os.NewError(fmt.Sprint("array property does not contain index:", idx))
 				return nil, err
 			}
 			cur = v[idx]
 		}
+		default:
+			err = os.NewError(fmt.Sprint("property is not container, cannot get property:", sn))
+			return nil, err
 	}
 	return cur, nil
 }
