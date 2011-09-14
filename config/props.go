@@ -19,14 +19,7 @@ var PropNameRegex = regexp.MustCompile("^(.+)\\[([0-9]+)\\]$")
 
 type Properties struct {
 	root interface{}
-	//Bool(name ...interface{}) (bool, bool)
-	//Int64(name string) (int64, bool)
-	//String(name string) (string, bool)
-	//Float64(name string) (float64, bool)
-	//Property(name string) (interface{}, bool)
-	//Properties(name string) (Properties, bool)
 }
-
 
 // ReadProperties decodes JSON data and stores it in a Properties structure.
 func ReadProperties(r io.Reader) (*Properties, os.Error) {
@@ -94,7 +87,7 @@ func (p *Properties) Float64(name ...interface{}) (float64, os.Error) {
 	return v, nil
 }
 
-// Float64 retrieves a float64 property value or the specified default.
+// Float64Default retrieves a float64 property value or the specified default.
 func (p *Properties) Float64Default(dflt float64, name ...interface{}) float64 {
 	v, err := p.Float64(name...)
 	if err != nil {
@@ -117,13 +110,22 @@ func (p *Properties) String(name ...interface{}) (string, os.Error) {
 	return v, nil
 }
 
-// String retrieves a string property value or the specified default.
+// StringDefault retrieves a string property value or the specified default.
 func (p *Properties) StringDefault(dflt string, name ...interface{}) string {
 	v, err := p.String(name...)
 	if err != nil {
 		return dflt
 	}
 	return v
+}
+
+// Properties retrieves a Properties value or an error if not found.
+func (p *Properties) Properties(name ...interface{}) (*Properties, os.Error) {
+	prop, err := p.Property(name...)
+	if err != nil {
+		return nil, err
+	}
+	return &Properties{ prop }, nil
 }
 
 // Property retrieves a raw Property value and an error if not found. 
@@ -152,7 +154,7 @@ func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 			if err != nil {
 				return nil, err
 			}
-			if idx >= int64(len(v)) {
+			if (idx < 0) || (idx >= int64(len(v))) {
 				err = os.NewError(fmt.Sprint("array property does not contain index: ", idx))
 				return nil, err
 			}
