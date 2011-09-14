@@ -9,7 +9,7 @@ import(
 	"testing"
 )
 
-var TestConfigData = `{
+var TestBoolConfigData = `{
 	"bool1":true,
 	"bool2":false,
 	"level2":{
@@ -21,9 +21,9 @@ var TestConfigData = `{
 
 func TestBool(t *testing.T) {
 
-	t.Log("Read the following JSON config data:\n" + TestConfigData)
+	t.Log("Read the following JSON config data:\n" + TestBoolConfigData)
 
-	properties, err := config.ReadProperties(strings.NewReader(TestConfigData))
+	properties, err := config.ReadProperties(strings.NewReader(TestBoolConfigData))
 	if err == nil {
 		t.Log("Success reading config properties.")
 	} else {
@@ -101,6 +101,13 @@ func TestBool(t *testing.T) {
 		}
 	} else {
 		t.Error("Error retrieving Bool value from property 'bool5[1]':", err)
+	}
+	
+	b = properties.BoolDefault(true, "level2", "bool6")
+	if b == true {
+		t.Log("Default Bool value for 'bool6' is true.")
+	} else {
+		t.Error("Default Bool value for 'bool6' is not true.")
 	}
 }
 
