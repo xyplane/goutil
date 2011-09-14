@@ -15,7 +15,7 @@ import (
 )
 
 var PropNameDelim = "."
-var PropNameRegex = regexp.MustCompile("^(.+)(\\[([0-9]+)\\])$") 
+var PropNameRegex = regexp.MustCompile("^(.+)\\[([0-9]+)\\]$") 
 
 type Properties struct {
 	root interface{}
@@ -62,6 +62,29 @@ func (p *Properties) BoolDefault(dflt bool, name ...interface{}) bool {
 	return v
 }
 
+// Float64 retrieves a float64 property value or an error if not found.
+func (p *Properties) Float64(name ...interface{}) (float64, os.Error) {
+	prop, err := p.Property(name...)
+	if err != nil {
+		return 0.0, err
+	}
+	v, ok := prop.(float64)
+	if !ok {
+		err = os.NewError("property is not of type 'float64'.")
+		return 0.0, err
+	} 
+	return v, nil
+}
+
+// Float64 retrieves a float64 property value or the specified default.
+func (p *Properties) Float64Default(dflt float64, name ...interface{}) float64 {
+	v, err := p.Float64(name...)
+	if err != nil {
+		return dflt
+	}
+	return v
+}
+
 // Property retrieves a raw Property value and an error if not found. 
 func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 	sname, err := coerce(name...)
@@ -102,12 +125,12 @@ func split(name string) []string {
 	var sname []string
 	names := strings.Split(name, PropNameDelim)
 	for _, n := range names {
-		if n != "" {
+		if len(n) > 0 {
 			match := PropNameRegex.FindStringSubmatch(n)
 			if match == nil {
 				sname = append(sname, n)
 			} else {
-				sname = append(sname, match[1], match[3])
+				sname = append(sname, match[1], match[2])
 			}
 		}
 	}
@@ -132,7 +155,7 @@ func coerce(name ...interface{}) (sname []string, err os.Error) {
 			case float64:
 				sname = append(sname, strconv.Itoa64(int64(v)))
 			default:
-				err = os.NewError(fmt.Sprint("name can not be coerced from type: ", reflect.TypeOf(n)))
+				err = os.NewError(fmt.Sprint("name cannot be coerced from type: ", reflect.TypeOf(n)))
 				break L
 		}
 	}
