@@ -159,10 +159,10 @@ func (p *Properties) Property(name ...interface{}) (interface{}, os.Error) {
 				return nil, err
 			}
 			cur = v[idx]
-		}
 		default:
 			err = os.NewError(fmt.Sprint("property is not container, cannot get property:", sn))
 			return nil, err
+		}
 	}
 	return cur, nil
 }
