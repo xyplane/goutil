@@ -3,3 +3,5 @@ A collection of utilities written in Go.
 log: An enhanced logger based on the standard Go logger.
 
 temp: A utility for creating temporary files with a specified prefix and suffix.
+
+config: A utility to read configuration properties stored in JSON format.
